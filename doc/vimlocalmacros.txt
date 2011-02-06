@@ -1,0 +1,39 @@
+*vimlocalmacros.txt*  Store and execute macros in current file.
+
+                                                *vimlocalmacros-author*
+Author:  Barry Arthur <barry dot arthur at gmail dot com>
+
+License: Same terms as Vim itself (see |license|)
+
+INTRODUCTION                                    *vimlocalmacros*
+
+vimlocalmacros is a plugin that allows local storage and execution of macros
+within a file. Sometimes when editing a particular file you have the need to
+perform a certain set of operations regularly and to make that easier you
+create a macro. It would be nice to store that macro with the file so that
+it's easily available again the next time you edit it. The vimlocalmacros
+plugin stores macros using the file's comment strings.
+
+At the moment, macros are stored and executed manually (with <leader>mw and
+<leader>mr respectively by default), however it is conceivable that this could
+be automated with a BufEnter,BufRead autocommand. This functionality has NOT
+been implemented yet due to security concerns.
+
+MARKER                                          *vimlocalmacros-marker*
+
+VimLocalMacros uses   comment-starter + 'vlm:' + comment-trailer   as a marker
+to signify that this comment contains a macro definition.
+
+USAGE                                           *vimlocalmacros-usage*
+
+With your cursor on a VLM line (See |vimlocalmacros-marker|), the normal mode
+key sequence:   <leader>mr   will execute the macro definition.
+
+To save a macro definition on the current line, use the normal mode key
+sequence:   <leader>mw
+
+ISSUES                                          *vimlocalmacros-issues*
+
+Report any issues to the plugin maintainer.
+
+ vim:tw=78:ts=8:ft=help:norl:
