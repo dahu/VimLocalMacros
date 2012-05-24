@@ -12,15 +12,22 @@
 "
 " Licensed under the same terms as Vim itself.
 " ============================================================================
-let s:VimLocalMacros = '0.0.1'  " alpha, unreleased
+let s:VimLocalMacros = '0.0.2'  " alpha, unreleased
 
 " Vimscript setup {{{1
 let s:old_cpo = &cpo
 set cpo&vim
 
+function! EscapeControlSequences(macro)
+  let macro = getreg(a:macro)
+  let macro = substitute(macro,"\<Esc>",'\\<esc>','g')
+  let macro = substitute(macro,"",'\\<c-r>','g')
+  return macro
+endfunction
+
 " Public Interface {{{1
 function! WriteMacro(macro)
-  call setline('.', [printf(&commentstring,printf('vlm:let @%s="%s"',a:macro,escape(substitute(getreg(a:macro),"\<Esc>",'\\<Esc>','g'), '"')))])
+  call append('.', [printf(&commentstring,printf('vlm:let @%s="%s"',a:macro, escape(EscapeControlSequences(a:macro), '"')))])
 endfunction
 
 function! RunMacroLine()
