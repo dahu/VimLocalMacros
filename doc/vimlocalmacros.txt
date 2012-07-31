@@ -14,10 +14,13 @@ create a macro. It would be nice to store that macro with the file so that
 it's easily available again the next time you edit it. The vimlocalmacros
 plugin stores macros using the file's comment strings.
 
-At the moment, macros are stored and executed manually (with <leader>mw and
-<leader>mr respectively by default), however it is conceivable that this could
-be automated with a BufEnter,BufRead autocommand. This functionality has NOT
-been implemented yet due to security concerns.
+By default, macros are stored and executed manually (with <leader>mw and
+<leader>mr respectively), however this can be automated with a
+BufEnter,BufRead autocommand, such as:
+>
+  autocmd BufEnter,BufRead * call RunAllVlm()
+<
+added to $MYVIMRC. WARNING: This functionality might be a security concern.
 
 MARKER                                          *vimlocalmacros-marker*
 

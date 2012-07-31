@@ -12,7 +12,7 @@
 "
 " Licensed under the same terms as Vim itself.
 " ============================================================================
-let s:VimLocalMacros = '0.0.2'  " alpha, unreleased
+let s:VimLocalMacros = '0.0.3'  " alpha, unreleased
 
 " Vimscript setup {{{1
 let s:old_cpo = &cpo
@@ -30,22 +30,31 @@ function! WriteMacro(macro)
   call append('.', [printf(&commentstring,printf('vlm:let @%s="%s"',a:macro, escape(EscapeControlSequences(a:macro), '"')))])
 endfunction
 
-function! RunMacroLine()
-  let line = getline('.')
+function! RunMacroLine(line)
+  let line = a:line
   let vlmm = '^\s*'.substitute(escape(&commentstring, '[]^$*.{}\'), '%s', 'vlm:\\(.*\\)', '')
   let vlml = ''
   silent! let vlml = matchlist(line, vlmm)[1]
   if vlml != ''
-    exe vlml
+    silent exe vlml
   else
     echo "Not a vlm line."
   endif
 endfunction
 
+function! RunAllVlm()
+  for line in getline(1, '$')
+    silent call RunMacroLine(line)
+  endfor
+endfunction
+
 " Maps {{{1
 " TODO: add clash and override checks
 nnoremap <leader>mw :call WriteMacro(input("Register? "))<CR>
-nnoremap <leader>mr :call RunMacroLine()<CR>
+nnoremap <leader>mr :call RunMacroLine(getline('.'))<CR>
+
+" Automatically Run Macros
+" autocmd BufRead * call RunAllVlm()
 
 " Teardown:{{{1
 "reset &cpo back to users setting
