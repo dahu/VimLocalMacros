@@ -13,6 +13,7 @@
 " Licensed under the same terms as Vim itself.
 " ============================================================================
 let s:VimLocalMacros = '0.0.3'  " alpha, unreleased
+let s:DefaultCommmentStr = '# %s'
 
 " Vimscript setup {{{1
 let s:old_cpo = &cpo
@@ -27,12 +28,22 @@ endfunction
 
 " Public Interface {{{1
 function! WriteMacro(macro)
-  call append('.', [printf(&commentstring,printf('vlm:let @%s="%s"',a:macro, escape(EscapeControlSequences(a:macro), '"')))])
+  let commentStr = &commentstring
+  if empty(commentStr)
+    let commentStr = s:DefaultCommmentStr
+  endif
+
+  call append('.', [printf(commentStr ,printf('vlm:let @%s="%s"',a:macro, escape(EscapeControlSequences(a:macro), '"')))])
 endfunction
 
 function! RunMacroLine(line)
+  let commentStr = &commentstring
+  if empty(commentStr)
+    let commentStr = s:DefaultCommmentStr
+  endif
+
   let line = a:line
-  let vlmm = '^\s*'.substitute(escape(&commentstring, '[]^$*.{}\'), '%s', 'vlm:\\(.*\\)', '')
+  let vlmm = '^\s*'.substitute(escape(commentStr, '[]^$*.{}\'), '%s', 'vlm:\\(.*\\)', '')
   let vlml = ''
   silent! let vlml = matchlist(line, vlmm)[1]
   if vlml != ''
